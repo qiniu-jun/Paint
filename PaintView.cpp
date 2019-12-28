@@ -62,6 +62,10 @@ void CPaintView::OnDraw(CDC* /*pDC*/)
 void CPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
 	ClientToScreen(&point);
+
+	CDC* dc = GetDC();
+	dc->MoveTo(point);
+
 	OnContextMenu(this, point);
 }
 
