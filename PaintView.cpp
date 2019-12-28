@@ -12,6 +12,9 @@
 
 #include "PaintDoc.h"
 #include "PaintView.h"
+#include <string>
+#include <windows.h>
+using namespace std;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -65,6 +68,11 @@ void CPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 
 	CDC* dc = GetDC();
 	dc->MoveTo(point);
+	CString cstr = L"123456";
+	string str = "123456";
+	USES_CONVERSION;
+	str = (string)T2A(cstr);
+	
 
 	OnContextMenu(this, point);
 }
