@@ -64,7 +64,8 @@ void CPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 	ClientToScreen(&point);
 
 	CDC* dc = GetDC();
-	dc->LineTo(point);
+	dc->MoveTo(point);
+
 	OnContextMenu(this, point);
 }
 
