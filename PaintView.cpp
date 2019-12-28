@@ -27,7 +27,9 @@ IMPLEMENT_DYNCREATE(CPaintView, CView)
 
 BEGIN_MESSAGE_MAP(CPaintView, CView)
 	ON_WM_CONTEXTMENU()
-	ON_WM_RBUTTONUP()
+//	ON_WM_RBUTTONUP()
+ON_WM_LBUTTONDOWN()
+ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CPaintView 构造/析构
@@ -62,15 +64,15 @@ void CPaintView::OnDraw(CDC* /*pDC*/)
 	// TODO: 在此处为本机数据添加绘制代码
 }
 
-void CPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-
-	CDC* dc = GetDC();
-	dc->MoveTo(point);
-
-	OnContextMenu(this, point);
-}
+//void CPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
+//{
+//	ClientToScreen(&point);
+//
+//	CDC* dc = GetDC();
+//	dc->MoveTo(point);
+//
+//	OnContextMenu(this, point);
+//}
 
 void CPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
@@ -102,3 +104,22 @@ CPaintDoc* CPaintView::GetDocument() const // 非调试版本是内联的
 
 
 // CPaintView 消息处理程序
+
+
+void CPaintView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	m_oldPoint = point;
+	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CPaintView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CDC* dc = GetDC();
+	dc->MoveTo(m_oldPoint);
+	dc->LineTo(point);
+	ReleaseDC(dc);
+	CView::OnLButtonUp(nFlags, point);
+}
