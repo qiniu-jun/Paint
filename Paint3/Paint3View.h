@@ -4,6 +4,13 @@
 
 #pragma once
 
+enum Draw_Type
+{
+	Draw_Line,
+	Draw_Ellipse,
+	Draw_Rect,
+	Draw_Pen
+};
 
 class CPaint3View : public CView
 {
@@ -37,6 +44,18 @@ protected:
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
+	Draw_Type m_Draw_Type;
+public:
+	afx_msg void OnDrawEllipse();
+	afx_msg void OnDrawLine();
+	afx_msg void OnDrawPen();
+	afx_msg void OnDrawRect();
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+protected:
+	CPoint m_OldPoint;
+	bool m_Is_Pen;
 };
 
 #ifndef _DEBUG  // Paint3View.cpp 中的调试版本
