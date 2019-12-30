@@ -132,7 +132,7 @@ void CPaint3View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(PS_SOLID, m_nwidth, RGB(1, 2, 3));
+	CPen pen(m_ntype, m_nwidth, RGB(1, 2, 3));
 
 	CPen *oldpen = dc.SelectObject(&pen);
 	switch (m_Draw_Type)
@@ -174,11 +174,9 @@ void CPaint3View::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(PS_SOLID, m_nwidth, RGB(1, 2, 3));
+	CPen pen(m_ntype, m_nwidth, RGB(1, 2, 3));
 
 	CPen* oldpen = dc.SelectObject(&pen);
-
-	CClientDC dc(this);
 	if (m_Draw_Type == Draw_Pen&&m_Is_Pen)
 	{
 		dc.MoveTo(m_OldPoint);
@@ -237,9 +235,10 @@ void CPaint3View::OnFileSetUp()
 	// TODO: 在此添加命令处理程序代码
 	SetUp setup;
 	setup.m_nwidth = m_nwidth;
-	setup.m_ntype =
+	setup.m_ntype = m_ntype;
 	if (IDOK == setup.DoModal())
 	{
 		m_nwidth = setup.m_nwidth;
+		m_ntype = setup.m_ntype;
 	}
 }
