@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Grap.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Paint3.h" />
     <ClInclude Include="Paint3Doc.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Grap.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Paint3.cpp" />
     <ClCompile Include="Paint3Doc.cpp" />

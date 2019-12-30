@@ -17,6 +17,7 @@
 #define new DEBUG_NEW
 #endif
 #include "SetUp.h"
+#include "Paint3Doc.h"
 
 
 
@@ -53,6 +54,12 @@ CPaint3View::CPaint3View() noexcept
 
 CPaint3View::~CPaint3View()
 {
+	int count = Graps.GetSize();
+	while(count--)
+	{
+		delete Graps.GetAt(count);
+	}
+	Graps.RemoveAll();
 }
 
 BOOL CPaint3View::PreCreateWindow(CREATESTRUCT& cs)
@@ -65,14 +72,26 @@ BOOL CPaint3View::PreCreateWindow(CREATESTRUCT& cs)
 
 // CPaint3View 绘图
 
-void CPaint3View::OnDraw(CDC* /*pDC*/)
+void CPaint3View::OnDraw(CDC* pdc)
 {
 	CPaint3Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
-	// TODO: 在此处为本机数据添加绘制代码
+	// TODO: 在此处为本机数据添加绘制代码'
+
+	
+	int count = Graps.GetSize();
+	for (int i = 0; i < count; i++)
+	{
+		Grap* grap = Graps.GetAt(i);
+		CPen pen(grap->m_type, grap->m_width, grap->m_color);
+		CPen* oldpen = pdc->SelectObject(&pen);
+		grap->Draw(pdc);
+		pdc->SelectObject(oldpen); 
+	}
+	
 }
 
 
@@ -132,9 +151,21 @@ void CPaint3View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(m_ntype, m_nwidth, RGB(1, 2, 3));
+	CPen pen(m_ntype, m_nwidth, m_color);
 
 	CPen *oldpen = dc.SelectObject(&pen);
+
+	if (m_Draw_Type != Draw_Pen)
+	{
+		Grap *grap= new Grap(m_Draw_Type, m_nwidth, m_ntype, m_color);
+		grap->AddPoint(m_OldPoint, point);
+		Graps.Add(grap);
+	}
+	else
+	{
+		PenGrap->AddPoint(point);
+		Graps.Add(PenGrap);
+	}
 	switch (m_Draw_Type)
 	{
 	case Draw_Line:
@@ -164,6 +195,8 @@ void CPaint3View::OnLButtonDown(UINT nFlags, CPoint point)
 	m_OldPoint = point;
 	if (m_Draw_Type == Draw_Pen)
 	{
+		PenGrap = new Grap(m_Draw_Type, m_nwidth,m_ntype,m_color);
+		PenGrap->AddPoint(point);
 		m_Is_Pen = TRUE;
 	}
 	CView::OnLButtonDown(nFlags, point);
@@ -174,17 +207,20 @@ void CPaint3View::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
-	CPen pen(m_ntype, m_nwidth, RGB(1, 2, 3));
+	CPen pen(m_ntype, m_nwidth, m_color);
 
 	CPen* oldpen = dc.SelectObject(&pen);
 	if (m_Draw_Type == Draw_Pen&&m_Is_Pen)
 	{
+
 		dc.MoveTo(m_OldPoint);
 		dc.LineTo(point);
 		m_OldPoint = point;
+		PenGrap->AddPoint(point);
 	}
 	CView::OnMouseMove(nFlags, point);
 	dc.SelectObject(oldpen);
+
 }
 
 
@@ -226,7 +262,6 @@ void CPaint3View::OnRButtonDown(UINT nFlags, CPoint point)
 	menu->TrackPopupMenu(LVS_ALIGNLEFT, point.x, point.y, this);
 	menu->Detach();
 	CView::OnRButtonDown(nFlags, point);
-	//me->Detach();
 }
 
 
@@ -236,9 +271,24 @@ void CPaint3View::OnFileSetUp()
 	SetUp setup;
 	setup.m_nwidth = m_nwidth;
 	setup.m_ntype = m_ntype;
+	setup.m_color = m_color;
 	if (IDOK == setup.DoModal())
 	{
 		m_nwidth = setup.m_nwidth;
 		m_ntype = setup.m_ntype;
+		m_color = setup.m_color;
 	}
 }
+
+
+//void CPaint3View::Serialize(CArchive& ar)
+//{
+//	POSITION pos = GetFirstViewPosition();
+//	if (ar.IsStoring())
+//	{	// storing code
+//
+//	}
+//	else
+//	{	// loading code
+//	}
+//}

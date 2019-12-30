@@ -18,6 +18,7 @@
 #define new DEBUG_NEW
 #endif
 
+#include "Paint3View.h"
 // CPaint3Doc
 
 IMPLEMENT_DYNCREATE(CPaint3Doc, CDocument)
@@ -56,13 +57,29 @@ BOOL CPaint3Doc::OnNewDocument()
 
 void CPaint3Doc::Serialize(CArchive& ar)
 {
+	POSITION pos = GetFirstViewPosition();
+
+	CPaint3View* view = (CPaint3View*)GetNextView(pos);
+	int count = view->Graps.GetSize();
 	if (ar.IsStoring())
 	{
 		// TODO:  在此添加存储代码
+		ar << count;
+		for (int i = 0;i<count;i++)
+		{
+			ar<<view->Graps.GetAt(i);
+		}
 	}
 	else
 	{
 		// TODO:  在此添加加载代码
+		ar >> count;
+		for (int i = 0; i < count; i++)
+		{
+			Grap* grap;
+			ar >> grap;
+			view->Graps.Add(grap);
+		}
 	}
 }
 

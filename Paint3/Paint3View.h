@@ -3,14 +3,8 @@
 //
 
 #pragma once
+#include "Grap.h"
 
-enum Draw_Type
-{
-	Draw_Line,
-	Draw_Ellipse,
-	Draw_Rect,
-	Draw_Pen
-};
 
 class CPaint3View : public CView
 {
@@ -65,6 +59,10 @@ public:
 	afx_msg void OnFileSetUp();
 	UINT m_nwidth;
 	int m_ntype;
+	COLORREF m_color;
+	CArray<Grap*> Graps;
+	Grap* PenGrap;
+//	virtual void Serialize(CArchive& ar);
 };
 
 #ifndef _DEBUG  // Paint3View.cpp 中的调试版本

@@ -9,7 +9,13 @@
 
 #include "resource.h"       // 主符号
 
-
+enum Draw_Type
+{
+	Draw_Line,
+	Draw_Ellipse,
+	Draw_Rect,
+	Draw_Pen
+};
 // CPaint3App:
 // 有关此类的实现，请参阅 Paint3.cpp
 //
