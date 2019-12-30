@@ -145,8 +145,19 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
 
+	
+
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
+	CMenu menu;
+	menu.CreatePopupMenu();
+	menu.AppendMenu(MF_STRING, 111, L"画圆");
+	menu.AppendMenu(MF_STRING, 112, L"画矩形");
+	
+	CMenu* mu = CMenu::FromHandle(GetMenuBar()->GetDefaultMenu());
+	mu->AppendMenu(MF_POPUP, (UINT)menu.m_hMenu, L"画图");
+	
+	menu.Detach();
 	return 0;
 }
 
@@ -156,6 +167,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 		return FALSE;
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
+
 
 	return TRUE;
 }
