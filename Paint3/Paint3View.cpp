@@ -16,7 +16,7 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+#include "SetUp.h"
 
 
 
@@ -36,6 +36,8 @@ BEGIN_MESSAGE_MAP(CPaint3View, CView)
 	ON_UPDATE_COMMAND_UI(ID_DRAW_LINE, &CPaint3View::OnUpdateDrawLine)
 	ON_UPDATE_COMMAND_UI(ID_DRAW_PEN, &CPaint3View::OnUpdateDrawPen)
 	ON_UPDATE_COMMAND_UI(ID_DRAW_RECT, &CPaint3View::OnUpdateDrawRect)
+	ON_WM_RBUTTONDOWN()
+	ON_COMMAND(ID_FILE_SET_UP, &CPaint3View::OnFileSetUp)
 END_MESSAGE_MAP()
 
 // CPaint3View 构造/析构
@@ -45,6 +47,8 @@ CPaint3View::CPaint3View() noexcept
 	// TODO: 在此处添加构造代码
 	m_Draw_Type = Draw_Line;
 	m_Is_Pen = FALSE;
+	m_nwidth = 0;
+	m_ntype = 0;
 }
 
 CPaint3View::~CPaint3View()
@@ -128,7 +132,9 @@ void CPaint3View::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CClientDC dc(this);
+	CPen pen(PS_SOLID, m_nwidth, RGB(1, 2, 3));
 
+	CPen *oldpen = dc.SelectObject(&pen);
 	switch (m_Draw_Type)
 	{
 	case Draw_Line:
@@ -147,6 +153,7 @@ void CPaint3View::OnLButtonUp(UINT nFlags, CPoint point)
 	default:
 		break;
 	}
+	dc.SelectObject(oldpen);
 	CView::OnLButtonUp(nFlags, point);
 }
 
@@ -166,7 +173,10 @@ void CPaint3View::OnLButtonDown(UINT nFlags, CPoint point)
 void CPaint3View::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	
+	CClientDC dc(this);
+	CPen pen(PS_SOLID, m_nwidth, RGB(1, 2, 3));
+
+	CPen* oldpen = dc.SelectObject(&pen);
 
 	CClientDC dc(this);
 	if (m_Draw_Type == Draw_Pen&&m_Is_Pen)
@@ -176,6 +186,7 @@ void CPaint3View::OnMouseMove(UINT nFlags, CPoint point)
 		m_OldPoint = point;
 	}
 	CView::OnMouseMove(nFlags, point);
+	dc.SelectObject(oldpen);
 }
 
 
@@ -204,4 +215,31 @@ void CPaint3View::OnUpdateDrawRect(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(m_Draw_Type == Draw_Rect);
+}
+
+
+void CPaint3View::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CMenu me;
+	me.LoadMenu(IDR_MENU1);
+	CMenu *menu = me.GetSubMenu(0);
+	ClientToScreen(&point);
+	menu->TrackPopupMenu(LVS_ALIGNLEFT, point.x, point.y, this);
+	menu->Detach();
+	CView::OnRButtonDown(nFlags, point);
+	//me->Detach();
+}
+
+
+void CPaint3View::OnFileSetUp()
+{
+	// TODO: 在此添加命令处理程序代码
+	SetUp setup;
+	setup.m_nwidth = m_nwidth;
+	setup.m_ntype =
+	if (IDOK == setup.DoModal())
+	{
+		m_nwidth = setup.m_nwidth;
+	}
 }

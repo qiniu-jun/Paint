@@ -61,6 +61,10 @@ public:
 	afx_msg void OnUpdateDrawLine(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateDrawPen(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateDrawRect(CCmdUI* pCmdUI);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnFileSetUp();
+	UINT m_nwidth;
+	int m_ntype;
 };
 
 #ifndef _DEBUG  // Paint3View.cpp 中的调试版本
