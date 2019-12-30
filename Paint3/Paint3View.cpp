@@ -32,6 +32,10 @@ BEGIN_MESSAGE_MAP(CPaint3View, CView)
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_UPDATE_COMMAND_UI(ID_DRAW_ELLIPSE, &CPaint3View::OnUpdateDrawEllipse)
+	ON_UPDATE_COMMAND_UI(ID_DRAW_LINE, &CPaint3View::OnUpdateDrawLine)
+	ON_UPDATE_COMMAND_UI(ID_DRAW_PEN, &CPaint3View::OnUpdateDrawPen)
+	ON_UPDATE_COMMAND_UI(ID_DRAW_RECT, &CPaint3View::OnUpdateDrawRect)
 END_MESSAGE_MAP()
 
 // CPaint3View 构造/析构
@@ -172,4 +176,32 @@ void CPaint3View::OnMouseMove(UINT nFlags, CPoint point)
 		m_OldPoint = point;
 	}
 	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CPaint3View::OnUpdateDrawEllipse(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_Draw_Type == Draw_Ellipse);
+}
+
+
+void CPaint3View::OnUpdateDrawLine(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_Draw_Type == Draw_Line);
+}
+
+
+void CPaint3View::OnUpdateDrawPen(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_Draw_Type == Draw_Pen);
+}
+
+
+void CPaint3View::OnUpdateDrawRect(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(m_Draw_Type == Draw_Rect);
 }

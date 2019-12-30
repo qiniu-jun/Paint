@@ -56,6 +56,11 @@ public:
 protected:
 	CPoint m_OldPoint;
 	bool m_Is_Pen;
+public:
+	afx_msg void OnUpdateDrawEllipse(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateDrawLine(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateDrawPen(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateDrawRect(CCmdUI* pCmdUI);
 };
 
 #ifndef _DEBUG  // Paint3View.cpp 中的调试版本
